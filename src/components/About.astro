@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, type Lang, type Key } from '../i18n/ui';
+import { links } from '../lib/links';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const cast = ['kalku', 'wekufe', 'spell', 'reni'];
+---
+
+<Base lang={lang} title={`${tt('about.title')} · kalku`}>
+  <div class="page page--doc backdrop">
+    <div class="container">
+      <header class="masthead">
+        <div>
+          <p class="eyebrow">{tt('about.eyebrow')}</p>
+          <h1>{tt('about.title')}</h1>
+          <p class="lead">{tt('about.lead')}</p>
+        </div>
+        <img src="/kalku.png" alt={tt('hero.mascot.alt')} width="960" height="732" />
+      </header>
+
+      <section>
+        <h2>{tt('about.name.title')}</h2>
+        <p>{tt('about.name.p1')}</p>
+        <p>{tt('about.name.p2')}</p>
+      </section>
+
+      <section>
+        <h2>{tt('about.cast.title')}</h2>
+        <p>{tt('about.cast.intro')}</p>
+        <dl class="cast">
+          {cast.map((term) => (
+            <div>
+              <dt>{tt(`about.cast.${term}.term` as Key)}</dt>
+              <dd>{tt(`about.cast.${term}.body` as Key)}</dd>
+            </div>
+          ))}
+        </dl>
+        <p>{tt('about.cast.plain')}</p>
+      </section>
+
+      <section>
+        <h2>{tt('about.mascot.title')}</h2>
+        <p>{tt('about.mascot.p1')}</p>
+        <p>{tt('about.mascot.p2')}</p>
+      </section>
+
+      <section>
+        <h2>{tt('about.kimun.title')}</h2>
+        <p>{tt('about.kimun.p1')}</p>
+        <p><a href={links.kimun} rel="noopener">{tt('about.kimun.link')} →</a></p>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .masthead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    max-width: 60rem !important;
+  }
+  .masthead img {
+    flex: none;
+    width: 16rem;
+    height: auto;
+    filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.3));
+  }
+  @media (max-width: 40rem) {
+    .masthead { flex-direction: column-reverse; align-items: flex-start; }
+    .masthead img { width: 11rem; }
+  }
+  .cast {
+    margin: 0 0 var(--space-4);
+  }
+  .cast > div {
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--border);
+  }
+  .cast > div:first-child {
+    padding-top: 0;
+  }
+  .cast dt {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cast dd {
+    margin: var(--space-1) 0 0;
+    color: var(--fg-muted);
+  }
+</style>

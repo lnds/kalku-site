@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import InstallCommand from './InstallCommand.astro';
+import Terminal from './Terminal.astro';
+import { t, pathInLang, type Lang } from '../i18n/ui';
+import { links } from '../lib/links';
+import { output } from '../lib/output';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const next = [
+  { cmd: 'kalku show <wekufe>', key: 'start.next.show' as const },
+  { cmd: 'kalku cast <wekufe>', key: 'start.next.cast' as const },
+  { cmd: 'kalku run --since origin/main', key: 'start.next.gate' as const },
+  { cmd: 'kalku run lib/thing.ex --format agent', key: 'start.next.agent' as const },
+  { cmd: 'claude mcp add kalku -- kalku mcp', key: 'start.next.mcp' as const },
+];
+---
+
+<Base lang={lang} title={`${tt('nav.start')} · kalku`}>
+  <div class="page page--doc backdrop">
+    <div class="container">
+      <header>
+        <p class="eyebrow">{tt('start.eyebrow')}</p>
+        <h1>{tt('start.title')}</h1>
+        <p class="lead">{tt('start.lead')}</p>
+      </header>
+
+      <section>
+        <h2>{tt('start.install.title')}</h2>
+        <p>{tt('start.install.brew')}</p>
+        <InstallCommand lang={lang} command={links.install.brew} />
+        <p class="gap">{tt('start.install.platforms')}</p>
+        <p>
+          {tt('start.install.bin')}{' '}
+          <a href={links.github.releases} rel="noopener">{tt('start.install.releases')} →</a>
+        </p>
+      </section>
+
+      <section>
+        <h2>{tt('start.first.title')}</h2>
+        <p>{tt('start.first.body')}</p>
+        <InstallCommand lang={lang} command="kalku run lib/thing.ex" />
+        <p class="gap">{tt('start.first.reads')}</p>
+        <Terminal title="kalku run" html={output.report} note={tt('hero.real')} />
+      </section>
+
+      <section>
+        <h2>{tt('start.next.title')}</h2>
+        <dl class="next">
+          {next.map(({ cmd, key }) => (
+            <div>
+              <dt><code>{cmd}</code></dt>
+              <dd>{tt(key)}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section>
+        <h2>{tt('start.config.title')}</h2>
+        <p>{tt('start.config.body')}</p>
+        <InstallCommand lang={lang} command="kalku init" />
+      </section>
+
+      <section>
+        <h2>{tt('start.docs.title')}</h2>
+        <p>{tt('start.docs.body')}</p>
+        <p><a class="btn" href={pathInLang('/docs/', lang)}>{tt('cta.docs')}</a></p>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .gap {
+    margin-top: var(--space-6);
+  }
+  .next {
+    margin: 0;
+  }
+  .next > div {
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--border);
+  }
+  .next > div:first-child {
+    padding-top: 0;
+  }
+  .next dt code {
+    color: var(--accent);
+  }
+  .next dd {
+    margin: var(--space-1) 0 0;
+    color: var(--fg-muted);
+  }
+</style>
